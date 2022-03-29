@@ -1,5 +1,5 @@
 # FISProject
-##Managementul productiei unei firme de asamblat calculatoare
+## Managementul productiei unei firme de asamblat calculatoare
 
 Se cere sa se proiecteze un sistem de management al productiei unei firme de asamblat calculatoare care sa indeplineasca urmatoarele cerinte:
 a.componentele de intrare (placi de baza, microprocesoare, hdd, carcase, monitoare, etc) au numele generic de componente. Firma face comenzi la furnizori pentru componente  şi fiecare comanda este inregistrata cu data, inventar de componente, furnizor, status (în asteptare, livrata), situate plata (platita, în plata) şi observatii
