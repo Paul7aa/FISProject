@@ -15,8 +15,8 @@ e.pentru partea de garantie a produselor, la fiecare sistem care intra în garan
 
 f.la cerere sistemul poate prezenta urmatoarele grafice:
 
-1.pentru un cod de componeta, situatia stocurilor în timp
-2.pentru un cod de sistem, situatia stocului în timp, a vanzarilor şi a produselor returnate pentru garantie
-3.pentru un furnizori şi pentru beneficiari, sitautia platilor în timp
+1.pentru un cod de componeta, situatia stocurilor în timp  
+2.pentru un cod de sistem, situatia stocului în timp, a vanzarilor şi a produselor returnate pentru garantie  
+3.pentru un furnizori şi pentru beneficiari, sitautia platilor în timp  
 
 g.în afara familiilor standard, firma accepta comenzi de sisteme personalizate, atunci când comenzile depasesc o anumita valoare, sistemele respective fiind incadrate în baza de date cu un cod separat
