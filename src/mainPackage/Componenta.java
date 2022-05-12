@@ -13,16 +13,18 @@ enum TipComponenta {
 
 public class Componenta {
 	private TipComponenta tip;
+	private String denumire;
 	private String cod;
 	private int nr_stoc;
 	private String caracteristici;
 	
-	public Componenta(TipComponenta tip, String cod, int nr_stoc, String caracteristici) {
+	public Componenta(TipComponenta tip, String denumire, String cod, int nr_stoc, String caracteristici) {
 		super();
 		this.tip = tip;
 		this.cod = cod;
 		this.nr_stoc = nr_stoc;
 		this.caracteristici = caracteristici;
+		this.denumire = denumire;
 	}
 	
 	public TipComponenta getTip() {
@@ -31,6 +33,15 @@ public class Componenta {
 	public void setTip(TipComponenta tip) {
 		this.tip = tip;
 	}
+	
+	public String getDenumire() {
+		return denumire;
+	}
+
+	public void setDenumire(String denumire) {
+		this.denumire = denumire;
+	}
+
 	public String getCod() {
 		return cod;
 	}
@@ -51,5 +62,11 @@ public class Componenta {
 	public void setCaracteristici(String caracteristici) {
 		this.caracteristici = caracteristici;
 	}
+
+	@Override
+	public String toString() {
+		return "Tip: " + tip + "\nDenumire: " + denumire + "\nCod: " + cod + "\nNr stoc: " + nr_stoc + "\nCaracteristici: " + caracteristici;
+	}
+	
 	
 }

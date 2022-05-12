@@ -7,41 +7,44 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	private Firma firma = new Firma();
+	
 	public MainFrame() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 1067, 808);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblFirma = new JLabel("FIRMA");
-		lblFirma.setBounds(159, 110, 72, 61);
+		lblFirma.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFirma.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblFirma.setBounds(205, 11, 664, 35);
 		contentPane.add(lblFirma);
+		
+		JButton btnComandaFurnizor = new JButton("COMANDA FURNIZOR");
+		btnComandaFurnizor.setBounds(433, 91, 201, 89);
+		contentPane.add(btnComandaFurnizor);
+		
+		
+		btnComandaFurnizor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ComandaFurnizorDialog dialog = new ComandaFurnizorDialog(firma);
+				dialog.setModal(true);
+				dialog.setVisible(true);
+			}
+		});
 	}
 
 }

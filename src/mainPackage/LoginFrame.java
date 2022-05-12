@@ -47,6 +47,7 @@ public class LoginFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginFrame() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -113,9 +114,10 @@ public class LoginFrame extends JFrame {
 					}
 
 						break;
+				case "supplier2":
 				case "supplier":
-					if (String.valueOf(passwordtField.getPassword()).equals("supplier")) {
-						supplierFrame = new SupplierFrame();
+					if (String.valueOf(passwordtField.getPassword()).equals(usernametField.getText().toLowerCase())) {
+						supplierFrame = new SupplierFrame(usernametField.getText().toLowerCase());
 						supplierFrame.setVisible(true);
 						frame.dispose();
 					}
