@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -31,24 +32,95 @@ public class SupplierFrame extends JFrame {
 	private JTextArea comandaTextArea;
 	private JPanel contentPane;
 	private Furnizor furnizor;
-	private JList componenteList;
-	private JList comenziList;
-	private DefaultListModel componenteListModel = new DefaultListModel();
-	private DefaultListModel comenziListModel = new DefaultListModel();
+	private JList<String> componenteList;
+	private JList<String> comenziList;
+	private DefaultListModel<String> componenteListModel = new DefaultListModel<String>();
+	private DefaultListModel<String> comenziListModel = new DefaultListModel<String>();
+	private String componenteInsuficiente;
 
 	public void RefreshLists() {
 		componenteListModel.clear();
 		if (furnizor.getComponente() != null) {
 			for (var component : furnizor.getComponente()) {
-				componenteListModel.addElement(component.getTip() + "  " + component.getCod() + " : " + component.getDenumire());
+				componenteListModel
+						.addElement(component.getTip() + "  " + component.getCod() + " : " + component.getDenumire());
 			}
 		}
-		
+
 		comenziListModel.clear();
-		if(furnizor.getComenziPrimite() != null) {
+		if (furnizor.getComenziPrimite() != null) {
 			for (var comanda : furnizor.getComenziPrimite()) {
 				comenziListModel.addElement(comanda.getDataInregistrarii() + " " + comanda.getStatus());
 			}
+		}
+	}
+
+	public boolean VerificaStocSuficient(Comanda comandaPrimita) {
+		boolean result = true;
+		componenteInsuficiente = "";
+
+		for (var componenta : comandaPrimita.getInventar()) {
+			for (var componentaInStoc : furnizor.getComponente()) {
+				if (componenta.getCod().equals(componentaInStoc.getCod())) {
+					if (componentaInStoc.getNr_stoc() < comandaPrimita.getCantitati()
+							.get(comandaPrimita.getInventar().indexOf(componenta))) {
+						componenteInsuficiente += componentaInStoc.getDenumire() + "\n";
+						result = false;
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public void AcceptaComanda(Comanda comandaPrimita) {
+		try {
+			// get components for operator:
+			Firma firma = new Firma();
+
+			// pentru fiecare componenta din comanda
+			for (var componenta : comandaPrimita.getInventar()) {
+				for (var componentaInStoc : furnizor.getComponente()) {
+					if (componenta.getCod().equals(componentaInStoc.getCod())) {
+
+						// pentru fiecare componenta din comanda se sterge din stocul furnizorului
+						// numarul de componente comandate
+						componentaInStoc.setNr_stoc(componentaInStoc.getNr_stoc()
+								- comandaPrimita.getCantitati().get(comandaPrimita.getInventar().indexOf(componenta)));
+
+						boolean componentaExistaInFirma = false;
+
+						// se adauga la stocul firmei daca exista produsul
+						for (var componentaInFirma : firma.getComponente()) {
+							if (componentaInFirma.getCod().equals(componenta.getCod())) {
+								componentaInFirma.setNr_stoc(componentaInFirma.getNr_stoc() + comandaPrimita
+										.getCantitati().get(comandaPrimita.getInventar().indexOf(componenta)));
+								componentaExistaInFirma = true;
+								break;
+							}
+						}
+
+						if (!componentaExistaInFirma) {
+							// se creeaza un nou obiect de componenta cu nr de inventar pentru firma
+							Componenta nouaComponenta = new Componenta(componenta, comandaPrimita.getCantitati()
+									.get(comandaPrimita.getInventar().indexOf(componenta)));
+							firma.getComponente().add(nouaComponenta);
+						}
+					}
+				}
+			}
+
+			// setare status comanda (Livrata)
+			comandaPrimita.setStatus(StatusComanda.Livrata);
+
+			// reactualizare jsonuri
+			firma.WriteComponente();
+			furnizor.WriteComponente();
+			furnizor.UpdateComenziPrimite();
+
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Eroare acceptare comanda", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -73,7 +145,7 @@ public class SupplierFrame extends JFrame {
 		adaugaBtn.setBounds(161, 515, 152, 52);
 		contentPane.add(adaugaBtn);
 
-		componenteList = new JList(componenteListModel);
+		componenteList = new JList<String>(componenteListModel);
 		componenteList.setBounds(20, -2, 459, 425);
 		contentPane.add(componenteList);
 
@@ -102,22 +174,23 @@ public class SupplierFrame extends JFrame {
 		lblComenzi.setBounds(662, 56, 75, 29);
 		contentPane.add(lblComenzi);
 
-		comenziList = new JList(comenziListModel);
+		comenziList = new JList<String>(comenziListModel);
 		contentPane.add(comenziList);
 
 		JScrollPane scrollPaneComenzi = new JScrollPane(comenziList);
 		scrollPaneComenzi.setBounds(467, 83, 457, 273);
 		contentPane.add(scrollPaneComenzi);
-		
+
 		comandaTextArea = new JTextArea();
 		comandaTextArea.setWrapStyleWord(true);
 		comandaTextArea.setLineWrap(true);
 		comandaTextArea.setEditable(false);
-		
+
 		JScrollPane scrollPaneComanda = new JScrollPane(comandaTextArea);
 		scrollPaneComanda.setBounds(467, 382, 457, 122);
 		contentPane.add(scrollPaneComanda);
-		
+
+		JButton acceptaComandaBtn = new JButton("Accepta comanda");
 
 		// functions
 		RefreshLists();
@@ -134,20 +207,52 @@ public class SupplierFrame extends JFrame {
 			}
 		});
 
-		componenteList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if (componenteList.getSelectedIndex() != -1) {
-					descriptionTextArea.setText(
-							furnizor.getComponente().get(componenteList.getSelectedIndex()).toString());
+		acceptaComandaBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (comenziList.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(null, "Nu este selectata nici o comanda!", "Eroare acceptare comanda",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				if (!comenziListModel.get(comenziList.getSelectedIndex()).toString().contains("InAsteptare")) {
+					JOptionPane.showMessageDialog(null, "Comanda selectata a fost deja livrata!",
+							"Eroare acceptare comanda", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
+						"Sunteti siguri ca doriti sa acceptati comanda?", "Acceptare comanda",
+						JOptionPane.YES_NO_OPTION)) {
+					if (VerificaStocSuficient(furnizor.getComenziPrimite().get(comenziList.getSelectedIndex()))) {
+						AcceptaComanda(furnizor.getComenziPrimite().get(comenziList.getSelectedIndex()));
+						RefreshLists();
+					} else {
+						JOptionPane.showMessageDialog(null,
+								"Nu exista componenta suficiente in stoc! \nComponente lipsa:\n"
+										+ componenteInsuficiente,
+								"Eroare acceptare comanda", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
-		
+		acceptaComandaBtn.setBounds(628, 515, 152, 52);
+		contentPane.add(acceptaComandaBtn);
+
+		componenteList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (componenteList.getSelectedIndex() != -1) {
+					descriptionTextArea
+							.setText(furnizor.getComponente().get(componenteList.getSelectedIndex()).toString());
+				}
+			}
+		});
+
 		comenziList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if (comenziList.getSelectedIndex() != -1) {
-					comandaTextArea.setText(
-							furnizor.getComenziPrimite().get(comenziList.getSelectedIndex()).toString());
+					comandaTextArea
+							.setText(furnizor.getComenziPrimite().get(comenziList.getSelectedIndex()).toString());
 				}
 			}
 		});

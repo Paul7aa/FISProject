@@ -25,14 +25,12 @@ public class Furnizor {
 		java.lang.reflect.Type componentsListType = new TypeToken<ArrayList<Componenta>>() {
 		}.getType();
 		ArrayList<Componenta> componente = gson.fromJson(jsonFileContent, componentsListType);
-		
-		if(componente!=null) {
+
+		if (componente != null) {
 			this.componente = new ArrayList<Componenta>(
-			componente
-			.stream()
-			.sorted((a,b) -> Integer.compare(a.getTip().ordinal(), b.getTip().ordinal()))
-			.collect(Collectors.toList()));
-			}
+					componente.stream().sorted((a, b) -> Integer.compare(a.getTip().ordinal(), b.getTip().ordinal()))
+							.collect(Collectors.toList()));
+		}
 	}
 
 	public void WriteComponente() {
@@ -42,9 +40,9 @@ public class Furnizor {
 		} catch (JsonIOException | IOException error) {
 			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
 		}
-			
+
 	}
-	
+
 	public void ReadComenziPrimite() {
 		Gson gson = new Gson();
 		String jsonFileContent = Utilities.getFileString(this.getDenumire() + "_comenzi.json");
@@ -52,8 +50,19 @@ public class Furnizor {
 		}.getType();
 		ArrayList<Comanda> comenziPrimite = gson.fromJson(jsonFileContent, comenziListType);
 		this.comenziPrimite = comenziPrimite;
+		if (comenziPrimite == null) 
+			this.comenziPrimite = new ArrayList<Comanda>();
 	}
-	
+
+	public void UpdateComenziPrimite() {
+		try (Writer writer = new FileWriter(this.getDenumire() + "_comenzi.json")) {
+			Gson gson = new Gson();
+			gson.toJson(this.getComenziPrimite(), writer);
+		} catch (JsonIOException | IOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+
 	public Furnizor(String denumire) {
 		super();
 		this.denumire = denumire;
@@ -61,7 +70,7 @@ public class Furnizor {
 		// get componente from json
 		ReadComponente();
 		ReadComenziPrimite();
-		//this.comenziPrimite = comenziPrimite;
+		// this.comenziPrimite = comenziPrimite;
 	}
 
 	public String getDenumire() {

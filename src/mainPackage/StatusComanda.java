@@ -1,6 +1,5 @@
 package mainPackage;
 
 public enum StatusComanda {
-	InAsteptare,
-	Livrata
+	InAsteptare, Livrata
 }

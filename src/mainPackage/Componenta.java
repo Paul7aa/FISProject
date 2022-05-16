@@ -1,14 +1,7 @@
 package mainPackage;
 
 enum TipComponenta {
-	PlacaDeBaza,
-	Procesor,
-	HDD,
-	SSD,
-	PlacaVideo,
-	RAM,
-	Carcasa,
-	Sursa
+	PlacaDeBaza, Procesor, HDD, SSD, PlacaVideo, RAM, Carcasa, Sursa
 }
 
 public class Componenta {
@@ -17,7 +10,7 @@ public class Componenta {
 	private String cod;
 	private int nr_stoc;
 	private String caracteristici;
-	
+
 	public Componenta(TipComponenta tip, String denumire, String cod, int nr_stoc, String caracteristici) {
 		super();
 		this.tip = tip;
@@ -26,14 +19,23 @@ public class Componenta {
 		this.caracteristici = caracteristici;
 		this.denumire = denumire;
 	}
-	
+
+	public Componenta(Componenta c, int nr_stoc) {
+		this.tip = c.tip;
+		this.cod = c.cod;
+		this.denumire = c.denumire;
+		this.caracteristici = c.caracteristici;
+		this.nr_stoc = nr_stoc;
+	}
+
 	public TipComponenta getTip() {
 		return tip;
 	}
+
 	public void setTip(TipComponenta tip) {
 		this.tip = tip;
 	}
-	
+
 	public String getDenumire() {
 		return denumire;
 	}
@@ -45,12 +47,15 @@ public class Componenta {
 	public String getCod() {
 		return cod;
 	}
+
 	public void setCod(String cod) {
 		this.cod = cod;
 	}
+
 	public int getNr_stoc() {
 		return nr_stoc;
 	}
+
 	public void setNr_stoc(int nr_stoc) {
 		this.nr_stoc = nr_stoc;
 	}
@@ -65,8 +70,8 @@ public class Componenta {
 
 	@Override
 	public String toString() {
-		return "Tip: " + tip + "\nDenumire: " + denumire + "\nCod: " + cod + "\nNr stoc: " + nr_stoc + "\nCaracteristici: " + caracteristici;
+		return "Tip: " + tip + "\nDenumire: " + denumire + "\nCod: " + cod + "\nNr stoc: " + nr_stoc
+				+ "\nCaracteristici: " + caracteristici;
 	}
-	
-	
+
 }

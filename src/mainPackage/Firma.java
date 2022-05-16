@@ -15,47 +15,77 @@ import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 
 public class Firma {
-	private List <Produs> produse;
-	private List <Promo> pachetePromotionale;
-	private List <Componenta> componente;
+	private List<Produs> produse = new ArrayList<Produs>();
+	private List<Promo> pachetePromotionale = new ArrayList<Promo>();
+	private List<Componenta> componente = new ArrayList<Componenta>();
 	
-	public Firma() {
-		super();
+	public void ReadComponente() {
+		Gson gson = new Gson();
+		String jsonFileContent = Utilities.getFileString("firma_componente.json");
+		java.lang.reflect.Type componentsListType = new TypeToken<ArrayList<Componenta>>() {
+		}.getType();
+		ArrayList<Componenta> componente = gson.fromJson(jsonFileContent, componentsListType);
+
+		if (componente != null) {
+			this.componente = new ArrayList<Componenta>(
+					componente.stream().sorted((a, b) -> Integer.compare(a.getTip().ordinal(), b.getTip().ordinal()))
+							.collect(Collectors.toList()));
+		}
 	}
-	
-	public List<Produs> getProduse() {
-		return produse;
+
+	public void WriteComponente() {
+		try (Writer writer = new FileWriter("firma_componente.json")) {
+			Gson gson = new Gson();
+			gson.toJson(this.getComponente(), writer);
+		} catch (JsonIOException | IOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
 	}
-	public void setProduse(List<Produs> produse) {
-		this.produse = produse;
-	}
-	public List<Promo> getPachetePromotionale() {
-		return pachetePromotionale;
-	}
-	public void setPachetePromotionale(List<Promo> pachetePromotionale) {
-		this.pachetePromotionale = pachetePromotionale;
-	}
-	public List<Componenta> getComponente() {
-		return componente;
-	}
-	public void setComponente(List<Componenta> componente) {
-		this.componente = componente;
-	}
-	
-	
+
 	public void TrimiteComandaFurnizor(Comanda comanda) {
 		Gson gson = new Gson();
 		String jsonFileContent = Utilities.getFileString(comanda.getFurnizor().getDenumire() + "_comenzi.json");
-		java.lang.reflect.Type comenziListType = new TypeToken<ArrayList<Comanda>>() {}.getType();
-		
+		java.lang.reflect.Type comenziListType = new TypeToken<ArrayList<Comanda>>() {
+		}.getType();
+
 		ArrayList<Comanda> comenzi = gson.fromJson(jsonFileContent, comenziListType);
-		
+
 		try (Writer writer = new FileWriter(comanda.getFurnizor().getDenumire() + "_comenzi.json")) {
-			if(comenzi == null) comenzi = new ArrayList<Comanda>();
+			if (comenzi == null)
+				comenzi = new ArrayList<Comanda>();
 			comenzi.add(comanda);
 			gson.toJson(comenzi, writer);
 		} catch (JsonIOException | IOException error) {
 			JOptionPane.showMessageDialog(null, error.getMessage(), "Eroare", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	public Firma() {
+		super();
+		ReadComponente();
+	}
+
+	public List<Produs> getProduse() {
+		return produse;
+	}
+
+	public void setProduse(List<Produs> produse) {
+		this.produse = produse;
+	}
+
+	public List<Promo> getPachetePromotionale() {
+		return pachetePromotionale;
+	}
+
+	public void setPachetePromotionale(List<Promo> pachetePromotionale) {
+		this.pachetePromotionale = pachetePromotionale;
+	}
+
+	public List<Componenta> getComponente() {
+		return componente;
+	}
+
+	public void setComponente(List<Componenta> componente) {
+		this.componente = componente;
 	}
 }

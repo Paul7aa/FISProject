@@ -103,6 +103,7 @@ public class LoginFrame extends JFrame {
 						clientFrame = new ClientFrame();
 						clientFrame.setVisible(true);
 						frame.dispose();
+						dispose();
 					}
 					
 					break;
@@ -111,6 +112,7 @@ public class LoginFrame extends JFrame {
 						mainFrame = new MainFrame();
 						mainFrame.setVisible(true);
 						frame.dispose();
+						dispose();
 					}
 
 						break;
@@ -120,6 +122,7 @@ public class LoginFrame extends JFrame {
 						supplierFrame = new SupplierFrame(usernametField.getText().toLowerCase());
 						supplierFrame.setVisible(true);
 						frame.dispose();
+						dispose();
 					}
 						break;
 				}
