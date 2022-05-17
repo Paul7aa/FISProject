@@ -1,26 +1,23 @@
 package mainPackage;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JLabel;
-import javax.swing.JList;
-
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import java.awt.Component;
 
 public class MainFrame extends JFrame {
 
@@ -34,6 +31,7 @@ public class MainFrame extends JFrame {
 	private DefaultListModel<String>  componenteComenziListModel = new DefaultListModel<String> ();
 	private JTextArea componentaComandaDescriptionTextArea;
 	private JLabel lblComponenteComenzi;
+	private JTextField txtCodComponenta;
 	
 	public void RefreshLists(){
 		componenteComenziListModel.clear();
@@ -114,16 +112,34 @@ public class MainFrame extends JFrame {
 		contentPane.add(scrollPaneDetaliiComponenta);
 		
 		JButton btnCautaComponenta = new JButton("CAUTA COMPONENTA");
-		btnCautaComponenta.setBounds(802, 733, 153, 48);
+		btnCautaComponenta.setBounds(888, 733, 153, 48);
 		contentPane.add(btnCautaComponenta);
 		
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setBounds(985, 11, 89, 23);
 		contentPane.add(btnLogout);
 		
+		txtCodComponenta = new JTextField();
+		txtCodComponenta.setHorizontalAlignment(SwingConstants.CENTER);
+		txtCodComponenta.setBounds(716, 733, 153, 48);
+		contentPane.add(txtCodComponenta);
+		txtCodComponenta.setColumns(10);
+		
+		JButton btnAsamblareSistem = new JButton("ASAMBLARE SISTEM");
+		btnAsamblareSistem.setBounds(424, 733, 153, 48);
+		contentPane.add(btnAsamblareSistem);
+		
 		//Refresh View
 		RefreshLists();
 		
+		
+		btnAsamblareSistem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FirmaAsamblareSistem asamblareDialog = new FirmaAsamblareSistem();
+				asamblareDialog.setModal(true);
+				asamblareDialog.setVisible(true);
+			}
+		});
 		
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -185,6 +201,47 @@ public class MainFrame extends JFrame {
 				componentaComandaDescriptionTextArea.setText("");
 				componenteComenziList.setSelectedIndex(-1);
 				RefreshLists();
+			}
+		});
+		
+		btnCautaComponenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean exista=false;
+				int stocFirma=0;
+				int stocFurnizori = 0;
+				for (var component : firma.getComponente()) {
+					if (component.getCod().equals(txtCodComponenta.getText())) {
+						stocFirma=component.getNr_stoc();
+						exista=true;
+					}
+				}
+				for (var component : furnizor1.getComponente()) {
+					if (component.getCod().equals(txtCodComponenta.getText())) {
+						stocFurnizori+=component.getNr_stoc();
+						exista=true;
+					}
+				}
+				for (var component : furnizor2.getComponente()) {
+					if (component.getCod().equals(txtCodComponenta.getText())) {
+						stocFurnizori+=component.getNr_stoc();
+						exista=true;
+					}
+				}
+				if(!exista) {JOptionPane.showMessageDialog(null, "Componenta cu codul "+txtCodComponenta.getText()+" nu exista!",
+						"Eroare!",
+						JOptionPane.ERROR_MESSAGE);
+				}else {
+					for (int i = 0; i < componenteComenziListModel.size(); i++) {
+						if (componenteComenziListModel.get(i).contains(txtCodComponenta.getText())) {
+							componenteComenziList.setSelectedIndex(i);
+							break;
+						}
+					}
+					JOptionPane.showMessageDialog(null, "STOCUL FIRMEI PENTRU PIESA CU CODUL " + txtCodComponenta.getText() + " ESTE: "+stocFirma+
+							"\nSTOCUL FURNIZORILOR PENTRU PIESA CU CODUL " + txtCodComponenta.getText() + " ESTE: "+stocFurnizori
+					,"STOC",JOptionPane.INFORMATION_MESSAGE);
+				}
+						 
 			}
 		});
 

@@ -3,28 +3,23 @@ package mainPackage;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import java.lang.reflect.Type;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
-import java.awt.Component;
+import javax.swing.JTextField;
 
 public class SupplierFrame extends JFrame {
 
@@ -37,6 +32,7 @@ public class SupplierFrame extends JFrame {
 	private DefaultListModel<String> componenteListModel = new DefaultListModel<String>();
 	private DefaultListModel<String> comenziListModel = new DefaultListModel<String>();
 	private String componenteInsuficiente;
+	private JTextField txtCodComponenta;
 
 	public void RefreshLists() {
 		componenteListModel.clear();
@@ -142,7 +138,7 @@ public class SupplierFrame extends JFrame {
 		contentPane.add(lblSupplier);
 
 		JButton adaugaBtn = new JButton("Adauga in stoc");
-		adaugaBtn.setBounds(161, 515, 152, 52);
+		adaugaBtn.setBounds(305, 515, 152, 52);
 		contentPane.add(adaugaBtn);
 
 		componenteList = new JList<String>(componenteListModel);
@@ -191,6 +187,21 @@ public class SupplierFrame extends JFrame {
 		contentPane.add(scrollPaneComanda);
 
 		JButton acceptaComandaBtn = new JButton("Accepta comanda");
+		acceptaComandaBtn.setBounds(628, 515, 152, 52);
+		contentPane.add(acceptaComandaBtn);
+
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.setBounds(835, 11, 89, 23);
+		contentPane.add(btnLogout);
+
+		JButton btnCautaComponenta = new JButton("Cauta Componenta");
+		btnCautaComponenta.setBounds(142, 515, 152, 52);
+		contentPane.add(btnCautaComponenta);
+
+		txtCodComponenta = new JTextField();
+		txtCodComponenta.setBounds(20, 515, 112, 52);
+		contentPane.add(txtCodComponenta);
+		txtCodComponenta.setColumns(10);
 
 		// functions
 		RefreshLists();
@@ -236,8 +247,38 @@ public class SupplierFrame extends JFrame {
 				}
 			}
 		});
-		acceptaComandaBtn.setBounds(628, 515, 152, 52);
-		contentPane.add(acceptaComandaBtn);
+
+		btnCautaComponenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean exista = false;
+				int stocFurnizor = 0;
+
+				for (var component : furnizor.getComponente()) {
+					if (component.getCod().equals(txtCodComponenta.getText())) {
+						stocFurnizor = component.getNr_stoc();
+						exista = true;
+					}
+				}
+				if (!exista) {
+					JOptionPane.showMessageDialog(null,
+							"Componenta cu codul " + txtCodComponenta.getText() + " nu exista!", "Eroare!",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					for (int i = 0; i < componenteListModel.size(); i++) {
+						if (componenteListModel.get(i).contains(txtCodComponenta.getText())) {
+							componenteList.setSelectedIndex(i);
+							break;
+						}
+					}
+					JOptionPane
+							.showMessageDialog(null,
+									"\nSTOCUL FURNIZORULUI PENTRU PIESA CU CODUL " + txtCodComponenta.getText()
+											+ " ESTE: " + stocFurnizor,
+									"STOC DISPONIBIL", JOptionPane.INFORMATION_MESSAGE);
+				}
+
+			}
+		});
 
 		componenteList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -254,6 +295,14 @@ public class SupplierFrame extends JFrame {
 					comandaTextArea
 							.setText(furnizor.getComenziPrimite().get(comenziList.getSelectedIndex()).toString());
 				}
+			}
+		});
+
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginFrame loginFrame = new LoginFrame();
+				dispose();
+				loginFrame.setVisible(true);
 			}
 		});
 	}
