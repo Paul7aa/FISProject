@@ -54,6 +54,11 @@ public class Desktop extends Sistem {
 	public void setTip(TipDesktop tip) {
 		this.tip = tip;
 	}
+
+	@Override
+	public String toString() { 
+		return super.toString() + "\nMonitor : " + this.getMonitor() +  "\nKeyboard : " + this.getKeyboard() + "\nMouse : " + this.getMouse();
+	}
 	
 	
 }

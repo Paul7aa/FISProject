@@ -45,5 +45,10 @@ public class Produs {
 	public void setCantitateLivrata(int cantitateLivrata) {
 		this.cantitateLivrata = cantitateLivrata;
 	}
+	@Override
+	public String toString() {
+		return "Cod : " + this.getCod() + "\nPret : " + this.getPret()  + "\nCantitate Disponibila : " + this.getCantitate() +
+				"\nCantitate Comandata : " + this.getCantitateComandata() +  "\nCantitate Livrata : " + this.getCantitateLivrata();
+	}
 	
 }

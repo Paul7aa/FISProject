@@ -62,6 +62,7 @@ public class SupplierAddComponent extends JDialog {
 		comboBoxTip.addItem("PlacaDeBaza");
 		comboBoxTip.addItem("Procesor");
 		comboBoxTip.addItem("HDD");
+		comboBoxTip.addItem("SSD");
 		comboBoxTip.addItem("PlacaVideo");
 		comboBoxTip.addItem("RAM");
 		comboBoxTip.addItem("Carcasa");

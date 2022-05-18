@@ -1,5 +1,6 @@
 package mainPackage;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 
@@ -9,23 +10,24 @@ enum StatusGarantie{
 }
 
 public class Garantie {
-	private Calendar dataStart;
+
+	private String dataStart;
 	private int durataLuni;
 	private StatusGarantie status;
 	List <Componenta> faultyComp;
 	
-	public Garantie(Calendar dataStart, int durataLuni, StatusGarantie status, List<Componenta> faultyComp) {
+	public Garantie(int durataLuni, StatusGarantie status, List<Componenta> faultyComp) {
 		super();
-		this.dataStart = dataStart;
+		this.dataStart = LocalDate.now().toString();
 		this.durataLuni = durataLuni;
 		this.status = status;
 		this.faultyComp = faultyComp;
 	}
 	
-	public Calendar getDataStart() {
+	public String getDataStart() {
 		return dataStart;
 	}
-	public void setDataStart(Calendar dataStart) {
+	public void setDataStart(String dataStart) {
 		this.dataStart = dataStart;
 	}
 	public int getDurataLuni() {
