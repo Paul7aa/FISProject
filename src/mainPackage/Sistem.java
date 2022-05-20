@@ -38,7 +38,7 @@ public class Sistem extends Produs{
 	public String toString() {
 		String componenteSistem = "\n";
 		for (var componenta : this.getComponente())
-			componenteSistem += componenta.getDenumire().toString() + "\n";
+			componenteSistem += "  >" + componenta.getDenumire().toString() + "\n";
 		return super.toString() + "\nDenumire : " + this.getDenumire() + "\nComponente : " + componenteSistem + "Garantie : " + this.getGarantie().getDurataLuni();
 	}
 	

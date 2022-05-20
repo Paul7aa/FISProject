@@ -32,7 +32,6 @@ public class SupplierFrame extends JFrame {
 	private DefaultListModel<String> componenteListModel = new DefaultListModel<String>();
 	private DefaultListModel<String> comenziListModel = new DefaultListModel<String>();
 	private String componenteInsuficiente;
-	private JTextField txtCodComponenta;
 
 	public void RefreshLists() {
 		componenteListModel.clear();
@@ -137,8 +136,8 @@ public class SupplierFrame extends JFrame {
 		lblSupplier.setBounds(142, 11, 664, 35);
 		contentPane.add(lblSupplier);
 
-		JButton adaugaBtn = new JButton("Adauga in stoc");
-		adaugaBtn.setBounds(305, 515, 152, 52);
+		JButton adaugaBtn = new JButton("ADAUGA IN STOC");
+		adaugaBtn.setBounds(250, 515, 197, 52);
 		contentPane.add(adaugaBtn);
 
 		componenteList = new JList<String>(componenteListModel);
@@ -186,22 +185,17 @@ public class SupplierFrame extends JFrame {
 		scrollPaneComanda.setBounds(467, 382, 457, 122);
 		contentPane.add(scrollPaneComanda);
 
-		JButton acceptaComandaBtn = new JButton("Accepta comanda");
-		acceptaComandaBtn.setBounds(628, 515, 152, 52);
+		JButton acceptaComandaBtn = new JButton("ACCEPTA COMANDA");
+		acceptaComandaBtn.setBounds(594, 515, 186, 52);
 		contentPane.add(acceptaComandaBtn);
 
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setBounds(835, 11, 89, 23);
 		contentPane.add(btnLogout);
 
-		JButton btnCautaComponenta = new JButton("Cauta Componenta");
-		btnCautaComponenta.setBounds(142, 515, 152, 52);
+		JButton btnCautaComponenta = new JButton("CAUTA COMPONENTA");
+		btnCautaComponenta.setBounds(30, 515, 197, 52);
 		contentPane.add(btnCautaComponenta);
-
-		txtCodComponenta = new JTextField();
-		txtCodComponenta.setBounds(20, 515, 112, 52);
-		contentPane.add(txtCodComponenta);
-		txtCodComponenta.setColumns(10);
 
 		// functions
 		RefreshLists();
@@ -253,26 +247,35 @@ public class SupplierFrame extends JFrame {
 				boolean exista = false;
 				int stocFurnizor = 0;
 
+				String codCautat = JOptionPane.showInputDialog(null,"Dati codul produsului pe care il cautati:");
+				if(codCautat == null)
+					return;
+				
+				if (codCautat.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "S-a introdus cod gol!", "Eroare!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				for (var component : furnizor.getComponente()) {
-					if (component.getCod().equals(txtCodComponenta.getText())) {
+					if (component.getCod().equals(codCautat)) {
 						stocFurnizor = component.getNr_stoc();
 						exista = true;
 					}
 				}
 				if (!exista) {
 					JOptionPane.showMessageDialog(null,
-							"Componenta cu codul " + txtCodComponenta.getText() + " nu exista!", "Eroare!",
+							"Componenta cu codul " + codCautat + " nu exista!", "Eroare!",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					for (int i = 0; i < componenteListModel.size(); i++) {
-						if (componenteListModel.get(i).contains(txtCodComponenta.getText())) {
+						if (componenteListModel.get(i).contains(codCautat)) {
 							componenteList.setSelectedIndex(i);
 							break;
 						}
 					}
 					JOptionPane
 							.showMessageDialog(null,
-									"\nSTOCUL FURNIZORULUI PENTRU PIESA CU CODUL " + txtCodComponenta.getText()
+									"\nSTOCUL FURNIZORULUI PENTRU PIESA CU CODUL " + codCautat
 											+ " ESTE: " + stocFurnizor,
 									"STOC DISPONIBIL", JOptionPane.INFORMATION_MESSAGE);
 				}

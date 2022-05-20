@@ -130,8 +130,8 @@ public class ComandaFurnizorDialog extends JDialog {
 						if(addedItems.contains(component.getDenumire()))
 							continue;
 						else
+							if(component.getNr_stoc() > 0)
 							cBoxComponente.addItem(component.getTip() + " : " + component.getDenumire());
-						
 					}
 				}
 				cBoxComponente.setSelectedIndex(-1);
@@ -221,6 +221,7 @@ public class ComandaFurnizorDialog extends JDialog {
 				
 				Comanda c  = new Comanda(LocalDate.now().toString(), componenteComanda, componenteQuantity, furnizor, StatusComanda.InAsteptare, textAreaObservatii.getText());
 				firma.TrimiteComandaFurnizor(c);
+				JOptionPane.showMessageDialog(null, "Comanda trimisa cu succes!", "Comanda trimisa", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			}
 		});

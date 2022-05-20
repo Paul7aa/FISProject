@@ -2,23 +2,30 @@ package mainPackage;
 
 import java.util.List;
 
-public class Promo {
+public class Promo extends Produs{
 	private String denumire;
 	private List<Produs> produse;
 	private int reducere;
-	private float pret;
+	private float pretRedus;
 	
-	
-	public Promo(String denumire, List<Produs> produse, int reducere) {
+
+	public Promo(String cod, float pret, int cantitate, int cantitateComandata, int cantitateLivrata, String denumire,
+			List<Produs> produse, int reducere) {
+		super(cod, pret, cantitate, cantitateComandata, cantitateLivrata);
 		this.denumire = denumire;
 		this.produse = produse;
 		this.reducere = reducere;
-		
-		this.pret = 0;
-		for(var produs: produse) {
-			this.pret += produs.getPret();
-		}
-		this.pret = (this.pret * (100 - reducere))/100;	
+		this.pretRedus = this.getPret() * reducere / 100;
+	}
+
+
+	public float getPretRedus() {
+		return pretRedus;
+	}
+
+
+	public void setPretRedus(float pretRedus) {
+		this.pretRedus = pretRedus;
 	}
 
 
@@ -52,8 +59,37 @@ public class Promo {
 	}
 
 
-	public float getPret() {
-		return pret;
+	@Override
+	public String toString() {
+		Firma firma = new Firma();
+		String produse = "\n";
+		for (var produs : this.getProduse()) {
+			
+			for(var desktop : firma.getDesktopuri()) {
+				if(produs.getCod().equals(desktop.getCod())) {
+					produse += "  > Desktop: " + desktop.getDenumire() + "\n"; 
+					break;
+				}
+			}
+			
+			for(var laptop : firma.getLaptopuri()) {
+				if(produs.getCod().equals(laptop.getCod())) {
+					produse += "  > Laptop: " + laptop.getDenumire() + "\n"; 
+					break;
+				}
+			}
+			
+			for(var aux : firma.getAuxuri()) {
+				if(produs.getCod().equals(aux.getCod())) {
+					produse += "  > " + aux.getTip().toString() + ": " +aux.getDenumire() + "\n"; 
+					break;
+				}
+			}
+			
+		}
+		return "Denumire : " + denumire + "\nProduse:" + produse + "\nPret initial : " + this.getPret() + "\nReducere : " + reducere + "% \nPret redus : "
+				+ pretRedus;
 	}
+
 	
 }

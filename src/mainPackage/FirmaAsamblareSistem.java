@@ -68,7 +68,7 @@ public class FirmaAsamblareSistem extends JDialog {
 				}
 			}
 		}
-		
+
 		Component[] componentsL = LaptopPanel.getComponents();
 		for (Component component : componentsL) {
 			if (component instanceof JComboBox) {
@@ -78,7 +78,6 @@ public class FirmaAsamblareSistem extends JDialog {
 			}
 		}
 
-		
 		for (var componenta : firma.getComponente()) {
 			switch (componenta.getTip().toString()) {
 			case "PlacaDeBaza":
@@ -298,167 +297,166 @@ public class FirmaAsamblareSistem extends JDialog {
 		lblAsamblareSistem.setBounds(90, 11, 414, 37);
 		contentPanel.add(lblAsamblareSistem);
 
-		LaptopPanel.setLayout(null);		
+		LaptopPanel.setLayout(null);
 		tFieldCodProdusL = new JTextField();
 		tFieldCodProdusL.setColumns(10);
 		tFieldCodProdusL.setBounds(223, 12, 252, 20);
 		LaptopPanel.add(tFieldCodProdusL);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Cod Produs");
 		lblNewLabel_3.setBounds(127, 11, 78, 22);
 		LaptopPanel.add(lblNewLabel_3);
-		
+
 		JLabel lblPret_1 = new JLabel("Pret");
 		lblPret_1.setBounds(163, 44, 42, 22);
 		LaptopPanel.add(lblPret_1);
-		
+
 		tFieldPretL = new JTextField();
 		tFieldPretL.setColumns(10);
 		tFieldPretL.setBounds(223, 45, 252, 20);
 		LaptopPanel.add(tFieldPretL);
-		
+
 		JLabel lblCantitateAsamblata_1 = new JLabel("Cantitate asamblata");
 		lblCantitateAsamblata_1.setBounds(86, 75, 119, 22);
 		LaptopPanel.add(lblCantitateAsamblata_1);
-		
+
 		tFieldCantitateL = new JTextField();
 		tFieldCantitateL.setColumns(10);
 		tFieldCantitateL.setBounds(223, 76, 252, 20);
 		LaptopPanel.add(tFieldCantitateL);
-		
+
 		JLabel lblDenumire_1 = new JLabel("Denumire Sistem");
 		lblDenumire_1.setBounds(102, 108, 108, 22);
 		LaptopPanel.add(lblDenumire_1);
-		
+
 		tFieldDenumireL = new JTextField();
 		tFieldDenumireL.setColumns(10);
 		tFieldDenumireL.setBounds(223, 109, 252, 20);
 		LaptopPanel.add(tFieldDenumireL);
-		
+
 		JLabel lblTipLaptop = new JLabel("Tip Laptop");
 		lblTipLaptop.setBounds(127, 141, 70, 22);
 		LaptopPanel.add(lblTipLaptop);
-		
+
 		JComboBox<String> cBoxTipLaptop = new JComboBox<String>();
-		cBoxTipLaptop.setModel(new DefaultComboBoxModel(new String[] {"Mini", "Notebook", "Ultrabook", "Gaming"}));
+		cBoxTipLaptop.setModel(new DefaultComboBoxModel(new String[] { "Mini", "Notebook", "Ultrabook", "Gaming" }));
 		cBoxTipLaptop.setBounds(223, 141, 252, 22);
 		LaptopPanel.add(cBoxTipLaptop);
-		
+
 		JLabel lblGarantie_1 = new JLabel("Garantie");
 		lblGarantie_1.setBounds(135, 182, 57, 22);
 		LaptopPanel.add(lblGarantie_1);
-		
+
 		tFieldGarantieL = new JTextField();
 		tFieldGarantieL.setColumns(10);
 		tFieldGarantieL.setBounds(223, 183, 65, 20);
 		LaptopPanel.add(tFieldGarantieL);
-		
+
 		JLabel luni_1 = new JLabel("luni");
 		luni_1.setBounds(298, 182, 57, 22);
 		LaptopPanel.add(luni_1);
-		
+
 		JLabel lblNewLabel_1_1 = new JLabel("Componente");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1_1.setBounds(248, 235, 95, 27);
 		LaptopPanel.add(lblNewLabel_1_1);
-		
+
 		JLabel lblNewLabel_2_2 = new JLabel("Placa de baza");
 		lblNewLabel_2_2.setBounds(115, 278, 94, 14);
 		LaptopPanel.add(lblNewLabel_2_2);
-		
+
 		cBoxPlacaDeBazaL = new JComboBox<String>();
 		cBoxPlacaDeBazaL.setBounds(219, 273, 256, 22);
 		LaptopPanel.add(cBoxPlacaDeBazaL);
-		
+
 		JLabel lblNewLabel_2_1_2 = new JLabel("Procesor");
 		lblNewLabel_2_1_2.setBounds(136, 312, 73, 14);
 		LaptopPanel.add(lblNewLabel_2_1_2);
-		
+
 		cBoxProcesorL = new JComboBox<String>();
 		cBoxProcesorL.setBounds(219, 308, 256, 22);
 		LaptopPanel.add(cBoxProcesorL);
-		
+
 		JLabel lblNewLabel_2_1_1_2 = new JLabel("Memorie interna");
 		lblNewLabel_2_1_1_2.setBounds(106, 347, 103, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_2);
-		
+
 		cBoxMemorieInternaL = new JComboBox<String>();
 		cBoxMemorieInternaL.setBounds(219, 343, 256, 22);
 		LaptopPanel.add(cBoxMemorieInternaL);
-		
+
 		JLabel lblNewLabel_2_1_1_1_2 = new JLabel("Placa Video");
 		lblNewLabel_2_1_1_1_2.setBounds(127, 385, 70, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_2);
-		
+
 		cBoxPlacaVideoL = new JComboBox<String>();
 		cBoxPlacaVideoL.setBounds(219, 381, 256, 22);
 		LaptopPanel.add(cBoxPlacaVideoL);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_2 = new JLabel("Memorie Operativa");
 		lblNewLabel_2_1_1_1_1_2.setBounds(92, 421, 113, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_2);
-		
+
 		cBoxRAML = new JComboBox<String>();
 		cBoxRAML.setBounds(219, 417, 256, 22);
 		LaptopPanel.add(cBoxRAML);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_1_2 = new JLabel("Carcasa");
 		lblNewLabel_2_1_1_1_1_1_2.setBounds(139, 458, 70, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_1_2);
-		
+
 		cBoxCarcasaL = new JComboBox<String>();
 		cBoxCarcasaL.setBounds(219, 454, 256, 22);
 		LaptopPanel.add(cBoxCarcasaL);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_1_1_3 = new JLabel("Sursa");
 		lblNewLabel_2_1_1_1_1_1_1_3.setBounds(141, 491, 51, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_1_1_3);
-		
+
 		cBoxSursaL = new JComboBox();
 		cBoxSursaL.setBounds(219, 487, 256, 22);
 		LaptopPanel.add(cBoxSursaL);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_1_1_3_1 = new JLabel("Greutate");
 		lblNewLabel_2_1_1_1_1_1_1_3_1.setBounds(141, 526, 51, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_1_1_3_1);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_1_1_3_2 = new JLabel("Camera");
 		lblNewLabel_2_1_1_1_1_1_1_3_2.setBounds(141, 562, 51, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_1_1_3_2);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_1_1_3_3 = new JLabel("Microfon");
 		lblNewLabel_2_1_1_1_1_1_1_3_3.setBounds(141, 597, 51, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_1_1_3_3);
-		
+
 		JLabel lblNewLabel_2_1_1_1_1_1_1_3_4 = new JLabel("Diagonala");
-		lblNewLabel_2_1_1_1_1_1_1_3_4.setBounds(141, 627, 51, 14);
+		lblNewLabel_2_1_1_1_1_1_1_3_4.setBounds(135, 627, 70, 14);
 		LaptopPanel.add(lblNewLabel_2_1_1_1_1_1_1_3_4);
-		
+
 		tFieldGreutate = new JTextField();
 		tFieldGreutate.setColumns(10);
 		tFieldGreutate.setBounds(219, 523, 252, 20);
 		LaptopPanel.add(tFieldGreutate);
-		
+
 		tFieldCamera = new JTextField();
 		tFieldCamera.setColumns(10);
 		tFieldCamera.setBounds(219, 559, 252, 20);
 		LaptopPanel.add(tFieldCamera);
-		
+
 		tFieldMicrofon = new JTextField();
 		tFieldMicrofon.setColumns(10);
 		tFieldMicrofon.setBounds(219, 594, 252, 20);
 		LaptopPanel.add(tFieldMicrofon);
-		
+
 		tFieldDiagonala = new JTextField();
 		tFieldDiagonala.setColumns(10);
 		tFieldDiagonala.setBounds(219, 624, 252, 20);
 		LaptopPanel.add(tFieldDiagonala);
-		
+
 		JButton btnAsamblareLaptop = new JButton("ASAMBLARE LAPTOP");
 		btnAsamblareLaptop.setBounds(190, 659, 182, 47);
 		LaptopPanel.add(btnAsamblareLaptop);
-		
-		
+
 		SetComponents(DesktopPanel, LaptopPanel);
 
 		btnAsamblareDesktop.addActionListener(new ActionListener() {
@@ -494,7 +492,13 @@ public class FirmaAsamblareSistem extends JDialog {
 						return;
 
 					}
-
+					
+					if (pretProdus <= 0) {
+						JOptionPane.showMessageDialog(null, "Pretul nu poate fi 0 sau mai mic",
+								"Eroare Asamblare", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
 					if (cantitateProdus > 20) {
 						JOptionPane.showMessageDialog(null, "Nu se pot asambla mai mult de 20 simultan",
 								"Eroare Asamblare", JOptionPane.ERROR_MESSAGE);
@@ -528,6 +532,13 @@ public class FirmaAsamblareSistem extends JDialog {
 						return;
 					}
 
+					if (firma.ProductExists(tFieldCodProdus.getText())) {
+						JOptionPane.showMessageDialog(null,
+								"Produsul cu codul: " + tFieldCodProdusL.getText() + " exista!", "Eroare Asamblare",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
 					if (JOptionPane.NO_OPTION == JOptionPane
 							.showConfirmDialog(null,
 									"Sunteti sigur ca doriti sa asamblati " + cantitateProdus + " desktop-uri "
@@ -554,7 +565,7 @@ public class FirmaAsamblareSistem extends JDialog {
 							}
 						}
 					}
-					firma.WriteComponente();
+					firma.WriteComponente(); //refresh componente
 
 					for (var desktop : firma.getDesktopuri()) {
 						if (desktop.getCod().equals(tFieldCodProdus.getText())) {
@@ -576,6 +587,7 @@ public class FirmaAsamblareSistem extends JDialog {
 							tFieldMonitor.getText(), tFieldKeyboard.getText(), tFieldMouse.getText(), tipDesktop);
 
 					firma.WriteDesktop(newDesktop);
+					JOptionPane.showMessageDialog(null, "Adaugat cu succes!", "", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Eroare la asamblare sistem:\n" + ex.getMessage(),
@@ -584,13 +596,11 @@ public class FirmaAsamblareSistem extends JDialog {
 				}
 			}
 		});
-		
-		
-		
+
 		btnAsamblareLaptop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
+
 					int perioadaGarantie, cantitateProdus;
 					float pretProdus;
 					float diagonala;
@@ -659,10 +669,17 @@ public class FirmaAsamblareSistem extends JDialog {
 						return;
 					}
 
+					if (firma.ProductExists(tFieldCodProdusL.getText())) {
+						JOptionPane.showMessageDialog(null,
+								"Produsul cu codul: " + tFieldCodProdusL.getText() + " exista!", "Eroare Asamblare",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
 					if (JOptionPane.NO_OPTION == JOptionPane
 							.showConfirmDialog(null,
 									"Sunteti sigur ca doriti sa asamblati " + cantitateProdus + " laptop-uri "
-											+ tFieldDenumire.getText() + "?",
+											+ tFieldDenumireL.getText() + "?",
 									"Asamblare Sistem", JOptionPane.YES_NO_OPTION))
 						return;
 
@@ -688,7 +705,7 @@ public class FirmaAsamblareSistem extends JDialog {
 					firma.WriteComponente();
 
 					for (var laptop : firma.getLaptopuri()) {
-						if (laptop.getCod().equals(tFieldCodProdus.getText())) {
+						if (laptop.getCod().equals(tFieldCodProdusL.getText())) {
 
 							JOptionPane.showMessageDialog(null,
 									"Laptop-ul cu codul " + laptop.getCod() + " deja exista." + errorString,
@@ -696,37 +713,37 @@ public class FirmaAsamblareSistem extends JDialog {
 							return;
 						}
 					}
-					
+
 					TipLaptop tipLaptop = TipLaptop.Notebook;
-					switch(cBoxTipLaptop.getSelectedItem().toString()) {
-					case "Mini" :
+					switch (cBoxTipLaptop.getSelectedItem().toString()) {
+					case "Mini":
 						tipLaptop = TipLaptop.Mini;
 						break;
-					case "Gaming" :
+					case "Gaming":
 						tipLaptop = TipLaptop.Gaming;
 						break;
-					case "Notebook" :
+					case "Notebook":
 						tipLaptop = TipLaptop.Notebook;
 						break;
-					case "Ultrabook" :
+					case "Ultrabook":
 						tipLaptop = TipLaptop.Ultrabook;
 						break;
 					}
 
-					
-					Laptop newLaptop = new Laptop (tFieldCodProdusL.getText(), pretProdus, cantitateProdus, 0,0 ,
+					Laptop newLaptop = new Laptop(tFieldCodProdusL.getText(), pretProdus, cantitateProdus, 0, 0,
 							tFieldDenumireL.getText(), componenteSistem,
 							new Garantie(perioadaGarantie, StatusGarantie.Inactiv, new ArrayList<Componenta>()),
 							greutate, tFieldCamera.getText(), tFieldMicrofon.getText(), diagonala, tipLaptop);
 
 					firma.WriteLaptop(newLaptop);
+					JOptionPane.showMessageDialog(null, "Adaugat cu succes!", "", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Eroare la asamblare sistem:\n" + ex.getMessage(),
 							"Eroare Asamblare", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
+
 			}
 		});
 	}

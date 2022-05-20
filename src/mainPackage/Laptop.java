@@ -61,6 +61,12 @@ public class Laptop extends Sistem{
 	public void setTip(TipLaptop tip) {
 		this.tip = tip;
 	}
+
+	@Override
+	public String toString() {
+		return "Tip: " + tip.toString() + "\n" + super.toString() + "\nGreutate: " + greutate + "\nDiagonala: " + diagonala
+				+ "\nCamera: " + camera + "\nMicrofon: " + microfon;
+	}
 	
 	
 }

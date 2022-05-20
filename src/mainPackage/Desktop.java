@@ -57,7 +57,7 @@ public class Desktop extends Sistem {
 
 	@Override
 	public String toString() { 
-		return super.toString() + "\nMonitor : " + this.getMonitor() +  "\nKeyboard : " + this.getKeyboard() + "\nMouse : " + this.getMouse();
+		return "Tip: " + tip.toString() + "\n" + super.toString() + "\nMonitor : " + this.getMonitor() +  "\nKeyboard : " + this.getKeyboard() + "\nMouse : " + this.getMouse();
 	}
 	
 	
