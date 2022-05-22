@@ -14,6 +14,7 @@ public class Garantie {
 	private String dataStart;
 	private int durataLuni;
 	private StatusGarantie status;
+	private int nrReturnat = 0;
 	List <Componenta> faultyComp;
 	
 	public Garantie(int durataLuni, StatusGarantie status, List<Componenta> faultyComp) {
@@ -47,6 +48,14 @@ public class Garantie {
 	}
 	public void setFaultyComp(List<Componenta> faultyComp) {
 		this.faultyComp = faultyComp;
+	}
+
+	public int getNrReturnat() {
+		return nrReturnat;
+	}
+
+	public void setNrReturnat(int nrReturnat) {
+		this.nrReturnat = nrReturnat;
 	}
 	
 	

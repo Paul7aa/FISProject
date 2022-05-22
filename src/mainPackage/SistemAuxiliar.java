@@ -34,6 +34,12 @@ public class SistemAuxiliar extends Produs{
 	public void setTip(TipSistemAux tip) {
 		this.tip = tip;
 	}
+	@Override
+	public String toString() {
+		return "Denumire : " + denumire + "\nTip : " + tip + "\n" + super.toString();
+	}
 	
-	
+	public String toStringClient() {
+		return "Tip : " + tip + "\nDenumire : " + denumire + "\n" + super.toStringClient();
+	}
 }

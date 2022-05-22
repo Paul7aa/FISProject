@@ -42,5 +42,12 @@ public class Sistem extends Produs{
 		return super.toString() + "\nDenumire : " + this.getDenumire() + "\nComponente : " + componenteSistem + "Garantie : " + this.getGarantie().getDurataLuni();
 	}
 	
+	public String toStringClient() {
+		String componenteSistem = "\n";
+		for (var componenta : this.getComponente())
+			componenteSistem += "  >" + componenta.getDenumire().toString() + "\n";
+		return super.toStringClient() + "\nDenumire : " + this.getDenumire() + "\nComponente : " + componenteSistem + "Garantie : " + this.getGarantie().getDurataLuni();
+	}
+	
 	
 }

@@ -68,5 +68,8 @@ public class Laptop extends Sistem{
 				+ "\nCamera: " + camera + "\nMicrofon: " + microfon;
 	}
 	
-	
+	public String toStringClient() {
+		return "Tip: " + tip.toString() + "\n" + super.toStringClient() + "\nGreutate: " + greutate + "\nDiagonala: " + diagonala
+				+ "\nCamera: " + camera + "\nMicrofon: " + microfon;
+	}
 }

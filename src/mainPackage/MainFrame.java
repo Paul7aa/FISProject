@@ -3,6 +3,8 @@ package mainPackage;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -12,15 +14,12 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JTabbedPane;
-import java.awt.Component;
-import javax.swing.ListModel;
 
 public class MainFrame extends JFrame {
 
@@ -42,6 +41,10 @@ public class MainFrame extends JFrame {
 	private DefaultListModel<String> auxListModel = new DefaultListModel<String>();
 	private JList<String> promoList;
 	private DefaultListModel<String> promoListModel = new DefaultListModel<String>();
+	private JList<String> comenziList;
+	private DefaultListModel<String> comenziListModel = new DefaultListModel<String>();
+	private JList<String> comenziPList;
+	private DefaultListModel<String> comenziPListModel = new DefaultListModel<String>();
 
 	public void RefreshLists() {
 		componenteComenziListModel.clear();
@@ -50,8 +53,11 @@ public class MainFrame extends JFrame {
 			firma.ReadComponente();
 			if (firma.getComponente() != null) {
 				for (var component : firma.getComponente()) {
+					String faulty = "";
+					if (component.isFaulty())
+						faulty = " - (faulty)";
 					componenteComenziListModel.addElement(
-							component.getTip() + "  " + component.getCod() + " : " + component.getDenumire());
+							component.getTip() + "  " + component.getCod() + " : " + component.getDenumire() + faulty);
 				}
 			}
 			break;
@@ -76,6 +82,23 @@ public class MainFrame extends JFrame {
 		}
 
 		RefreshProduse();
+		RefreshComenzi();
+	}
+	
+	public void RefreshComenzi() {
+		comenziListModel.clear();
+		comenziPListModel.clear();
+		
+		firma.ReadComenziClient();
+		firma.ReadComenziPClient();
+
+		for (var comandaClient : firma.getComenziClient()) {
+			comenziListModel.addElement(comandaClient.getDataPlasarii() + " : " + comandaClient.getStatusComanda());
+		}
+		
+		for (var comandaPClient : firma.getComenziPClient()) {
+			comenziPListModel.addElement(comandaPClient.getDataPlasarii() + " : " + comandaPClient.getStatusComanda());
+		}
 	}
 
 	public void RefreshProduse() {
@@ -83,7 +106,7 @@ public class MainFrame extends JFrame {
 		firma.ReadDesktopuri();
 		if (firma.getDesktopuri() != null) {
 			for (var desktop : firma.getDesktopuri()) {
-				desktopListModel.addElement(desktop.getDenumire() + " - cantitate : " + desktop.getCantitate());
+				desktopListModel.addElement(desktop.getCod() + " : " + desktop.getDenumire() + " - cantitate : " + desktop.getCantitate());
 			}
 		}
 
@@ -91,7 +114,7 @@ public class MainFrame extends JFrame {
 		firma.ReadLaptopuri();
 		if (firma.getLaptopuri() != null) {
 			for (var laptop : firma.getLaptopuri()) {
-				laptopListModel.addElement(laptop.getDenumire() + " - cantitate : " + laptop.getCantitate());
+				laptopListModel.addElement(laptop.getCod() + " : " + laptop.getDenumire() + " - cantitate : " + laptop.getCantitate());
 			}
 		}
 
@@ -99,7 +122,7 @@ public class MainFrame extends JFrame {
 		firma.ReadAux();
 		if (firma.getAuxuri() != null) {
 			for (var aux : firma.getAuxuri()) {
-				auxListModel.addElement(aux.getDenumire() + " - cantitate : " + aux.getCantitate());
+				auxListModel.addElement(aux.getTip() + " " + aux.getCod() + " : " + aux.getDenumire() + " - cantitate : " + aux.getCantitate());
 			}
 		}
 
@@ -107,12 +130,61 @@ public class MainFrame extends JFrame {
 		firma.ReadPromo();
 		if (firma.getPromouri() != null) {
 			for (var promo : firma.getPromouri()) {
-				promoListModel.addElement(promo.getDenumire() + " - cantitate : " + promo.getCantitate());
+				promoListModel.addElement(promo.getCod() + " : " + promo.getDenumire() + " - cantitate : " + promo.getCantitate());
 			}
 		}
 
 	}
 
+	public void CheckGarantii() {
+		
+		for (var desktop: firma.getDesktopuri()) {
+			if(desktop.getGarantie().getStatus() == StatusGarantie.Activ) {
+				List<String>componenteSistem = new ArrayList<String>();
+				for(var comp : desktop.getComponente()) {
+					componenteSistem.add(comp.getCod() + " : " + comp.getDenumire());
+				}
+				RezolvareGarantieDialog newDialog = new RezolvareGarantieDialog(componenteSistem, desktop.getDenumire());
+				newDialog.setModal(true);
+				String codDefect = newDialog.run();
+				
+				if(codDefect.equals(""))
+					return;
+				
+				for (var comp : firma.getComponente()) {
+					if(comp.getCod().equals(codDefect)) {
+						comp.setFaulty(true);
+					}
+				}
+			}
+			desktop.getGarantie().setStatus(StatusGarantie.Inactiv);
+		}
+		for (var laptop: firma.getLaptopuri()) {
+			if(laptop.getGarantie().getStatus() == StatusGarantie.Activ) {
+				List<String>componenteSistem = new ArrayList<String>();
+				for(var comp : laptop.getComponente()) {
+					componenteSistem.add(comp.getCod() + " : " + comp.getDenumire());
+				}
+				RezolvareGarantieDialog newDialog = new RezolvareGarantieDialog(componenteSistem, laptop.getDenumire());
+				newDialog.setModal(true);
+				String codDefect = newDialog.run();
+				
+				if(codDefect.equals(""))
+					return;
+				
+				for (var comp : firma.getComponente()) {
+					if(comp.getCod().equals(codDefect)) {
+						comp.setFaulty(true);
+					}
+				}
+			}
+			laptop.getGarantie().setStatus(StatusGarantie.Inactiv);
+		}
+		firma.WriteComponente();
+		firma.WriteDesktopuri();
+		firma.WriteLaptopuri();
+	}
+	
 	public MainFrame() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -167,12 +239,12 @@ public class MainFrame extends JFrame {
 		btnLogout.setBounds(985, 11, 89, 23);
 		contentPane.add(btnLogout);
 
-		JTabbedPane tabbedPaneSisteme = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPaneSisteme.setBounds(364, 79, 323, 702);
-		contentPane.add(tabbedPaneSisteme);
+		JTabbedPane tabbedPaneProduse = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneProduse.setBounds(364, 79, 323, 702);
+		contentPane.add(tabbedPaneProduse);
 
 		JPanel desktopPanel = new JPanel();
-		tabbedPaneSisteme.addTab("Desktop", null, desktopPanel, null);
+		tabbedPaneProduse.addTab("Desktop", null, desktopPanel, null);
 		desktopPanel.setLayout(null);
 
 		desktopList = new JList<String>(desktopListModel);
@@ -198,7 +270,7 @@ public class MainFrame extends JFrame {
 		desktopPanel.add(btnAsamblareSistem);
 
 		JPanel laptopPanel = new JPanel();
-		tabbedPaneSisteme.addTab("Laptop", null, laptopPanel, null);
+		tabbedPaneProduse.addTab("Laptop", null, laptopPanel, null);
 		laptopPanel.setLayout(null);
 
 		laptopList = new JList<String>(laptopListModel);
@@ -224,7 +296,7 @@ public class MainFrame extends JFrame {
 		laptopPanel.add(btnAsamblareSistemL);
 
 		JPanel auxiliarePanel = new JPanel();
-		tabbedPaneSisteme.addTab("Auxiliare", null, auxiliarePanel, null);
+		tabbedPaneProduse.addTab("Auxiliare", null, auxiliarePanel, null);
 		auxiliarePanel.setLayout(null);
 
 		auxList = new JList<String>(auxListModel);
@@ -250,7 +322,7 @@ public class MainFrame extends JFrame {
 		auxiliarePanel.add(btnAdaugareaAuxiliar);
 
 		JPanel promoPanel = new JPanel();
-		tabbedPaneSisteme.addTab("Promo", null, promoPanel, null);
+		tabbedPaneProduse.addTab("Promo", null, promoPanel, null);
 		promoPanel.setLayout(null);
 
 		promoList = new JList<String>(promoListModel);
@@ -284,10 +356,66 @@ public class MainFrame extends JFrame {
 		JButton btnCautaProdus = new JButton("CAUTA PRODUS");
 		btnCautaProdus.setBounds(439, 787, 179, 48);
 		contentPane.add(btnCautaProdus);
+		
+		JLabel lblComenzi = new JLabel("Comenzi");
+		lblComenzi.setHorizontalAlignment(SwingConstants.CENTER);
+		lblComenzi.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblComenzi.setBounds(25, 42, 314, 35);
+		contentPane.add(lblComenzi);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(10, 79, 347, 702);
+		contentPane.add(tabbedPane);
+		
+		JPanel comenziPanel = new JPanel();
+		tabbedPane.addTab("Comenzi", null, comenziPanel, null);
+		comenziPanel.setLayout(null);
+		
+		comenziList = new JList<String>(comenziListModel);
+		contentPane.add(comenziList);
+		
+		JScrollPane comenziScrollPane = new JScrollPane(comenziList);
+		comenziScrollPane.setBounds(10, 11, 322, 333);
+		comenziPanel.add(comenziScrollPane);
+		
+		JScrollPane scrollPaneComanda = new JScrollPane();
+		scrollPaneComanda.setBounds(10, 355, 322, 262);
+		comenziPanel.add(scrollPaneComanda);
+		
+		JTextArea textAreaComanda = new JTextArea();
+		scrollPaneComanda.setViewportView(textAreaComanda);
+		
+		JButton btnAcceptaComanda = new JButton("ACCEPTA");
+		btnAcceptaComanda.setBounds(190, 628, 131, 36);
+		comenziPanel.add(btnAcceptaComanda);
+		
+		JPanel personalizatPanel = new JPanel();
+		tabbedPane.addTab("Sisteme Personalizate", null, personalizatPanel, null);
+		personalizatPanel.setLayout(null);
+		
+		comenziPList = new JList<String>(comenziPListModel);
+		contentPane.add(comenziPList);
+		
+		JScrollPane comenziPScrollPane = new JScrollPane(comenziPList);
+		comenziPScrollPane.setBounds(10, 11, 322, 333);
+		personalizatPanel.add(comenziPScrollPane);
+		
+		JScrollPane scrollPaneComandaP = new JScrollPane();
+		scrollPaneComandaP.setBounds(10, 355, 322, 262);
+		personalizatPanel.add(scrollPaneComandaP);
+		
+		JTextArea textAreaComandaP = new JTextArea();
+		scrollPaneComandaP.setViewportView(textAreaComandaP);
+		
+		JButton btnAcceptaComandaP = new JButton("ACCEPTA");
+		btnAcceptaComandaP.setBounds(190, 628, 131, 36);
+		personalizatPanel.add(btnAcceptaComandaP);
 
+		CheckGarantii();
+		
 		// Refresh View
 		RefreshLists();
-
+		
 		// ADDING
 		// FUNCTIONS------------------------------------------------------------------------------------
 
@@ -337,6 +465,34 @@ public class MainFrame extends JFrame {
 			}
 		});
 
+		btnAcceptaComanda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(comenziList.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(null, "Selectati comanda!", "Eroare acceptare", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				firma.AcceptaComanda(comenziList.getSelectedIndex());
+				RefreshLists();
+				JOptionPane.showMessageDialog(null, "Comanda a fost acceptata", "Acceptare succes", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		
+		btnAcceptaComandaP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(comenziPList.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(null, "Selectati comanda!", "Eroare acceptare", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				firma.AcceptaComandaP(comenziPList.getSelectedIndex());
+				RefreshLists();
+				JOptionPane.showMessageDialog(null, "Comanda a fost acceptata", "Acceptare succes", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+		});
+		
 		// ------------------------------------------------------------------------------------------------------
 		// DELETING
 		// FUNCTIONS---------------------------------------------------------------------------------------------
@@ -482,6 +638,28 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		comenziList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (comenziList.getSelectedIndex() == -1)
+					return;
+
+				textAreaComanda.setText(firma.getComenziClient().get(comenziList.getSelectedIndex()).toString());
+
+			}
+		});
+
+		comenziPList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (comenziPList.getSelectedIndex() == -1)
+					return;
+
+				textAreaComandaP.setText(firma.getComenziPClient().get(comenziPList.getSelectedIndex()).toString());
+
+			}
+		});
+	
 
 		// ---------------------------------------------------------------------------------------------------------
 		// SEARCH
@@ -492,7 +670,7 @@ public class MainFrame extends JFrame {
 				boolean exista = false;
 				int stocFirma = 0;
 				int stocFurnizori = 0;
-				String codCautat = JOptionPane.showInputDialog(null, "Dati codul produsului pe care il cautati:");
+				String codCautat = JOptionPane.showInputDialog(null, "Dati codul componentei pe care o cautati:");
 				if (codCautat == null)
 					return;
 
@@ -536,6 +714,66 @@ public class MainFrame extends JFrame {
 							"STOC", JOptionPane.INFORMATION_MESSAGE);
 				}
 
+			}
+		});
+		
+		btnCautaProdus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String codCautat = JOptionPane.showInputDialog(null, "Dati codul produsului pe care il cautati:");
+				if (codCautat == null)
+					return;
+
+				if (codCautat.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "S-a introdus cod gol!", "Eroare cautare produs!", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				try {
+					String informatii = "";
+					String returnate = "";
+					boolean exista = false;
+					for(var produs : firma.getProduse()) {
+						if (produs.getCod().toLowerCase().equals(codCautat.toLowerCase())) {
+							exista = true;
+							informatii = "Cod Produs : " + codCautat.toLowerCase();
+							if(produs instanceof Desktop) {
+								 informatii += "\nTip : Desktop \nDenumire produs : " + ((Desktop)produs).getDenumire();
+								 returnate += ((Desktop)produs).getGarantie().getNrReturnat();
+							}else {
+								if(produs instanceof Laptop) {
+									informatii += "\nTip : Laptop \nDenumire produs : " +((Laptop)produs).getDenumire();
+									 returnate += ((Laptop)produs).getGarantie().getNrReturnat();
+									 tabbedPaneProduse.setSelectedIndex(1);
+								}else {
+									if(produs instanceof SistemAuxiliar) {
+										informatii +="\nTip : Aux \nDenumire produs : " + ((SistemAuxiliar)produs).getDenumire();
+										 tabbedPaneProduse.setSelectedIndex(2);
+									}else {
+										if(produs instanceof Promo) {
+											informatii += "\nTip : Promo \nDenumire produs : " +((Promo)produs).getDenumire();
+											 tabbedPaneProduse.setSelectedIndex(3);
+										}
+									}
+								}
+							}
+							
+							informatii += "\nStoc Disponibil : " + produs.getCantitate() + "\nCantitate comandata : " + produs.getCantitateComandata() +
+									"\nVandut : " + produs.getCantitateLivrata();
+							informatii = (!returnate.isEmpty())? informatii + "\nReturnate pentru garantie : " + returnate : informatii;
+							
+							break;
+						}
+					}	
+					
+					if(!exista) {
+						JOptionPane.showMessageDialog(null, "Produsul cu codul " + codCautat +" nu exista!" , "Eroare cautare produs!", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					JOptionPane.showMessageDialog(null, "Produs gasit!\n" + informatii , "Produs gasit", JOptionPane.INFORMATION_MESSAGE);
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Eroare cautare produs!", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 

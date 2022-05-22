@@ -51,4 +51,8 @@ public class Produs {
 				"\nCantitate Comandata : " + this.getCantitateComandata() +  "\nCantitate Livrata : " + this.getCantitateLivrata();
 	}
 	
+	public String toStringClient() {
+		return "Pret : " + this.getPret();
+	}
+	
 }

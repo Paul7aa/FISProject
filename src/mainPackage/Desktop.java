@@ -2,9 +2,8 @@ package mainPackage;
 
 import java.util.List;
 
-enum TipDesktop{
-	Gaming,
-	Office
+enum TipDesktop {
+	Gaming, Office
 }
 
 public class Desktop extends Sistem {
@@ -56,9 +55,13 @@ public class Desktop extends Sistem {
 	}
 
 	@Override
-	public String toString() { 
-		return "Tip: " + tip.toString() + "\n" + super.toString() + "\nMonitor : " + this.getMonitor() +  "\nKeyboard : " + this.getKeyboard() + "\nMouse : " + this.getMouse();
+	public String toString() {
+		return "Tip: " + tip.toString() + "\n" + super.toString() + "\nMonitor : " + this.getMonitor() + "\nKeyboard : "
+				+ this.getKeyboard() + "\nMouse : " + this.getMouse();
 	}
-	
-	
+
+	public String toStringClient() {
+		return "Tip: " + tip.toString() + "\n" + super.toStringClient() + "\nMonitor : " + this.getMonitor() + "\nKeyboard : "
+				+ this.getKeyboard() + "\nMouse : " + this.getMouse();
+	}
 }

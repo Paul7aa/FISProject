@@ -23,6 +23,8 @@ public class Firma {
 	private List<SistemAuxiliar> auxuri = new ArrayList<SistemAuxiliar>();
 	private List<Promo> promouri = new ArrayList<Promo>();
 	private List<Componenta> componente = new ArrayList<Componenta>();
+	private List<ComandaClient> comenziClient = new ArrayList<ComandaClient>();
+	private List<ComandaPersonalizatClient> comenziPClient = new ArrayList<ComandaPersonalizatClient>();
 
 	public boolean ProductExists(String codX) {
 		try {
@@ -212,6 +214,50 @@ public class Firma {
 		}
 	}
 	
+	public void WriteComenziClient() {
+
+		try (Writer writer = new FileWriter("firma_comenzi.json")) {
+			Gson gson = new Gson();
+			gson.toJson(comenziClient, writer);
+		} catch (JsonIOException | IOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+	
+	public void WriteComandaClient(ComandaClient newComandaClient) {
+		ReadComenziClient();
+		comenziClient.add(newComandaClient);
+
+		try (Writer writer = new FileWriter("firma_comenzi.json")) {
+			Gson gson = new Gson();
+			gson.toJson(comenziClient, writer);
+		} catch (JsonIOException | IOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+	
+	public void WriteComenziPClient() {
+
+		try (Writer writer = new FileWriter("firma_comenziP.json")) {
+			Gson gson = new Gson();
+			gson.toJson(comenziPClient, writer);
+		} catch (JsonIOException | IOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+	
+	public void WriteComandaPClient(ComandaPersonalizatClient newComandaClient) {
+		ReadComenziPClient();
+		comenziPClient.add(newComandaClient);
+
+		try (Writer writer = new FileWriter("firma_comenziP.json")) {
+			Gson gson = new Gson();
+			gson.toJson(comenziPClient, writer);
+		} catch (JsonIOException | IOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+	
 	public void ReadProduse() {
 		ReadAux();
 		ReadPromo();
@@ -270,6 +316,32 @@ public class Firma {
 			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
 		}
 	}
+	
+	public void ReadComenziClient() {
+		try {
+			Gson gson = new Gson();
+			String jsonFileContent = Utilities.getFileString("firma_comenzi.json");
+			java.lang.reflect.Type comenziListType = new TypeToken<ArrayList<ComandaClient>>() {
+			}.getType();
+			comenziClient = gson.fromJson(jsonFileContent, comenziListType);
+		} catch (JsonIOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+	
+	public void ReadComenziPClient() {
+		try {
+			Gson gson = new Gson();
+			String jsonFileContent = Utilities.getFileString("firma_comenziP.json");
+			java.lang.reflect.Type comenziPListType = new TypeToken<ArrayList<ComandaPersonalizatClient>>() {
+			}.getType();
+			comenziPClient = gson.fromJson(jsonFileContent, comenziPListType);
+		} catch (JsonIOException error) {
+			JOptionPane.showMessageDialog(new JFrame(), error.getMessage());
+		}
+	}
+
+
 
 	public void ReadComponente() {
 		try {
@@ -314,6 +386,79 @@ public class Firma {
 		} catch (JsonIOException | IOException error) {
 			JOptionPane.showMessageDialog(null, error.getMessage(), "Eroare", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	public void AcceptaComanda(int i) {
+		ReadComenziClient();
+		
+		ComandaClient comandaClient = comenziClient.get(i);
+		
+		for (var produs : comandaClient.getProduseComandate()) {
+			for(var desktop : getDesktopuri()) {
+				if(produs.getCod().equals(desktop.getCod())) {
+					desktop.setCantitateLivrata(desktop.getCantitateLivrata() - 1);
+					desktop.setCantitate(desktop.getCantitate()-1);
+					desktop.setCantitateLivrata(desktop.getCantitateLivrata() + 1);
+				}
+			}
+			for(var laptop : getLaptopuri()) {
+				if(produs.getCod().equals(laptop.getCod())) {
+					laptop.setCantitateLivrata(laptop.getCantitateLivrata() - 1);
+					laptop.setCantitate(laptop.getCantitate()-1);
+					laptop.setCantitateLivrata(laptop.getCantitateLivrata() + 1);
+				}
+			}
+			for(var promo : getPromouri()) {
+				if(produs.getCod().equals(promo.getCod())) {
+					promo.setCantitateLivrata(promo.getCantitateLivrata() - 1);
+					promo.setCantitate(promo.getCantitate()-1);
+					promo.setCantitateLivrata(promo.getCantitateLivrata() + 1);
+				}
+			}
+			for(var aux: getAuxuri()) {
+				if(produs.getCod().equals(aux.getCod())) {
+					aux.setCantitateLivrata(aux.getCantitateLivrata() - 1);
+					aux.setCantitate(aux.getCantitate()-1);
+					aux.setCantitateLivrata(aux.getCantitateLivrata() + 1);
+				}
+			}
+		}
+	
+		WriteDesktopuri();
+		WriteLaptopuri();
+		WritePromouri();
+		WriteAuxuri();
+		Client c = new Client();
+		
+		
+		for(var produs : comandaClient.getProduseComandate()) {
+			c.WriteProdus(produs);
+		}
+		
+		comenziClient.get(i).setStatusComanda(StatusComanda.Livrata);
+		comenziClient.get(i).setStatusPlata(StatusPlata.Platit);
+		
+		WriteComenziClient();
+	}
+	
+	public void AcceptaComandaP(int i) {
+		ReadComenziPClient();
+		
+		ComandaPersonalizatClient comandaPClient = comenziPClient.get(i);
+		
+		for(var componenta : comandaPClient.getComponente()) {
+			for(var componentaFirma : getComponente()) {
+				if(componentaFirma.getCod().equals(componenta.getCod()))
+					componentaFirma.setNr_stoc(componentaFirma.getNr_stoc()-1);
+			}
+		}
+		
+		WriteComponente();
+		
+		comenziPClient.get(i).setStatusComanda(StatusComanda.Livrata);
+		comenziPClient.get(i).setStatusPlata(StatusPlata.Platit);
+		
+		WriteComenziPClient();
 	}
 
 	public Firma() {
@@ -373,4 +518,22 @@ public class Firma {
 	public void setComponente(List<Componenta> componente) {
 		this.componente = componente;
 	}
+
+	public List<ComandaClient> getComenziClient() {
+		return comenziClient;
+	}
+
+	public void setComenziClient(List<ComandaClient> comenziClient) {
+		this.comenziClient = comenziClient;
+	}
+
+	public List<ComandaPersonalizatClient> getComenziPClient() {
+		return comenziPClient;
+	}
+
+	public void setComenziPClient(List<ComandaPersonalizatClient> comenziPClient) {
+		this.comenziPClient = comenziPClient;
+	}
+	
+	
 }

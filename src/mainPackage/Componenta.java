@@ -10,6 +10,7 @@ public class Componenta {
 	private String cod;
 	private int nr_stoc;
 	private String caracteristici;
+	private boolean faulty = false;
 
 	public Componenta(TipComponenta tip, String denumire, String cod, int nr_stoc, String caracteristici) {
 		super();
@@ -26,6 +27,16 @@ public class Componenta {
 		this.denumire = c.denumire;
 		this.caracteristici = c.caracteristici;
 		this.nr_stoc = nr_stoc;
+	}
+
+	
+	
+	public boolean isFaulty() {
+		return faulty;
+	}
+
+	public void setFaulty(boolean faulty) {
+		this.faulty = faulty;
 	}
 
 	public TipComponenta getTip() {
